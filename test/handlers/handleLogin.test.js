@@ -1,12 +1,22 @@
 const login = require('../../src/handlers/handleLogin');
 const Models = require('../../models');
 
-beforeEach(() => Models.users.create({ username: 'TestUser' }));
-afterEach(() => Models.users.destroy({
-  where: { username: 'TestUser' },
-  truncate: false,
-  restartIdentity: true,
-}));
+beforeEach(() => {
+  Models.users.create({ username: 'TestUser' });
+});
+afterEach(() => {
+  Models.questions.destroy({
+    where: { },
+    truncate: false,
+    restartIdentity: true,
+  });
+  Models.users.destroy({
+    where: { username: 'TestUser' },
+    truncate: false,
+    restartIdentity: true,
+  });
+});
+
 
 afterAll(() => Models.questions.destroy({
   truncate: false,
@@ -40,3 +50,12 @@ describe('function checkQuestionsExists', () => {
       expect(data.length).toBe(0)));
 });
 
+describe('function addQuestions', () => {
+  test('gets questions and options from external API and inserts into database', () =>
+    login.addQuestions().then((data) => {
+      Models.questions.findAll().then(Data =>
+        expect(Data.length).toBeGreaterThan(0));
+      Models.options.findAll().then(Data =>
+        expect(Data.length).toBeGreaterThan(0));
+    }));
+});
