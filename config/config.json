@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "database_admin",
+    "password": "password",
+    "database": "quizzydb_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "database_admin",
+    "password": "password",
+    "database": "quizzydb_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "database_admin",
+    "password": "password",
+    "database": "quizzydb_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
