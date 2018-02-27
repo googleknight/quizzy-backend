@@ -2,6 +2,7 @@ const Models = require('../../models');
 const rp = require('request-promise');
 
 const ALLQUESTIONSURL = 'https://5gj1qvkc5h.execute-api.us-east-1.amazonaws.com/dev/allQuestions';
+const ANSWERURL = 'https://5gj1qvkc5h.execute-api.us-east-1.amazonaws.com/dev/findAnswerById/';
 function checkUserExists(userName) {
   return Models.users.findOne({
     where: {
@@ -37,6 +38,25 @@ function addQuestions() {
     })
     .then(allPromises => Promise.all(allPromises));
 }
+function addAnswers() {
+  return Models.questions.findAll({
+    attributes: ['questionId'],
+  })
+    .then(questionIds =>
+      questionIds.map(questionId =>
+        rp.get(ANSWERURL + questionId.questionId)
+          .then((answer) => {
+            const correctAnswer = JSON.parse(answer).answer;
+            return Models.answers.create({
+              questionId: questionId.questionId,
+              answer: correctAnswer,
+            });
+          })));
+}
+
+function getResponse() {
+
+}
 
 function handleLogin(userName) {
   return checkUserExists(userName)
@@ -49,10 +69,14 @@ function handleLogin(userName) {
     .then(() => checkQuestionsExists())
     .then((questions) => {
       if (questions.length === 0) {
-        return Promise.resolve(addQuestions());
+        return Promise.resolve(addQuestions())
+          .then(data => addAnswers())
+          .then(allPromises => Promise.resolve(allPromises));
       }
-    });
+      return questions;
+    })
+    .then(allResponses => getResponse());
 }
 module.exports = {
-  handleLogin, checkUserExists, addUser, checkQuestionsExists, addQuestions,
+  handleLogin, checkUserExists, addUser, checkQuestionsExists, addQuestions, addAnswers, getResponse,
 };

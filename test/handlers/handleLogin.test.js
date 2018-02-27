@@ -59,3 +59,11 @@ describe('function addQuestions', () => {
         expect(Data.length).toBeGreaterThan(0));
     }));
 });
+
+describe('function addAnswers', () => {
+  test('gets answers from external API for that questionId and inserts into database', () =>
+    login.addAnswers().then((data) => {
+      Models.answers.findAll().then(Data =>
+        expect(Data.length).toBeGreaterThan(0));
+    }));
+});
