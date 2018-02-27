@@ -8,6 +8,10 @@ afterEach(() => Models.users.destroy({
   restartIdentity: true,
 }));
 
+afterAll(() => Models.questions.destroy({
+  truncate: false,
+  restartIdentity: true,
+}));
 
 describe('function checkUserExists', () => {
   test('should return null as user doesnot exist in db', () =>
@@ -20,13 +24,19 @@ describe('function checkUserExists', () => {
 
 describe('function handleLogin', () => {
   test('should return null as user doesnot exist in db', () =>
-    login.handleLogin('Shubham').then(data =>
-      expect(data.username).toBe('Shubham')));
+    login.handleLogin('TestUser3').then(data =>
+      expect(data.username).toBe('TestUser3')));
 });
 
 describe('function addUser', () => {
   test('adds a user and returns the user added in database', () =>
     login.addUser('TestUser2').then(data =>
       expect(data.username).toBe('TestUser2')));
+});
+
+describe('function checkQuestionsExists', () => {
+  test('returns entries of questions in its table to check if it is empty', () =>
+    login.checkQuestionsExists().then(data =>
+      expect(data.length).toBe(0)));
 });
 
