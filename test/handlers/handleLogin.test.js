@@ -2,7 +2,12 @@ const login = require('../../src/handlers/handleLogin');
 const Models = require('../../models');
 
 beforeEach(() => Models.users.create({ username: 'TestUser' }));
-afterEach(() => Models.users.destroy({ where: { username: 'TestUser' }, truncate: false, restartIdentity: true }));
+afterEach(() => Models.users.destroy({
+  where: { username: 'TestUser' },
+  truncate: false,
+  restartIdentity: true,
+}));
+
 
 describe('function checkUserExists', () => {
   test('should return null as user doesnot exist in db', () =>
@@ -16,5 +21,12 @@ describe('function checkUserExists', () => {
 describe('function handleLogin', () => {
   test('should return null as user doesnot exist in db', () =>
     login.handleLogin('Shubham').then(data =>
-      expect(data).toBeNull()));
+      expect(data.username).toBe('Shubham')));
 });
+
+describe('function addUser', () => {
+  test('adds a user and returns the user added in database', () =>
+    login.addUser('TestUser2').then(data =>
+      expect(data.username).toBe('TestUser2')));
+});
+

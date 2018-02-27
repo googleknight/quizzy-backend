@@ -7,7 +7,15 @@ function checkUserExists(userName) {
     },
   });
 }
-function handleLogin(userName) {
-  return checkUserExists(userName);
+function addUser(userName) {
+  return Models.users.create({ username: userName });
 }
-module.exports = { handleLogin, checkUserExists };
+function handleLogin(userName) {
+  return checkUserExists(userName)
+    .then((user) => {
+      if (user === null) {
+        return Promise.resolve(addUser(userName));
+      }
+    });
+}
+module.exports = { handleLogin, checkUserExists, addUser };
