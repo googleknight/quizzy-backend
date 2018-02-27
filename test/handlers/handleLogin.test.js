@@ -2,19 +2,19 @@ const login = require('../../src/handlers/handleLogin');
 const Models = require('../../models');
 
 beforeEach(() => {
-  Models.users.create({ username: 'TestUser' });
+  Promise.resolve(Models.users.create({ username: 'TestUser' }));
 });
 afterEach(() => {
-  Models.questions.destroy({
+  Promise.resolve(Models.questions.destroy({
     where: { },
     truncate: false,
     restartIdentity: true,
-  });
-  Models.users.destroy({
-    where: { username: 'TestUser' },
+  }));
+  Promise.resolve(Models.users.destroy({
+    where: { username: ['TestUser', 'TestUser3'] },
     truncate: false,
     restartIdentity: true,
-  });
+  }));
 });
 
 
@@ -33,9 +33,9 @@ describe('function checkUserExists', () => {
 });
 
 describe('function handleLogin', () => {
-  test('should return null as user doesnot exist in db', () =>
+  test('should add user in database and give formatted response', () =>
     login.handleLogin('TestUser3').then(data =>
-      expect(data.username).toBe('TestUser3')));
+      expect(data.length).toBeGreaterThan(0)));
 });
 
 describe('function addUser', () => {
@@ -66,4 +66,10 @@ describe('function addAnswers', () => {
       Models.answers.findAll().then(Data =>
         expect(Data.length).toBeGreaterThan(0));
     }));
+});
+
+describe('function getResponse', () => {
+  test('gets formatted response from various tables', () =>
+    login.getResponse('TestUser').then(data =>
+      expect(data.length).toBe(0)));
 });

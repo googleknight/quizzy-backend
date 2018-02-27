@@ -7,14 +7,14 @@ module.exports = [
     handler: (request, response) => {
       handleLogin(request.payload.username).then((allQuestionsData) => {
         response({
-          data: 'some data',
+          data: allQuestionsData,
           statusCode: 200,
         });
       })
         .catch(() => {
           response({
             data: {
-              reason: 'Unable to retrieve questions and your.',
+              reason: 'Unable to retrieve questions and your responses.',
             },
             statusCode: 500,
           });

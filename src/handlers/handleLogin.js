@@ -54,8 +54,29 @@ function addAnswers() {
           })));
 }
 
-function getResponse() {
-
+function getResponse(userName) {
+  return Models.questions.findAll({
+    order: ['questionId'],
+  })
+    .then(questions =>
+      questions.map(question =>
+        Models.responses.findOne({
+          where: { questionId: question.questionId, username: userName },
+        })
+          .then(response =>
+            Models.options.findAll({
+              where: { questionId: question.questionId },
+            })
+              .then((options) => {
+                const allOptions = options.map(optionElement =>
+                  optionElement.option);
+                return {
+                  questionId: question.questionId,
+                  statement: question.statement,
+                  options: allOptions,
+                  response,
+                };
+              }))));
 }
 
 function handleLogin(userName) {
@@ -75,8 +96,15 @@ function handleLogin(userName) {
       }
       return questions;
     })
-    .then(allResponses => getResponse());
+    .then(allResponses => getResponse(userName))
+    .then(allPromises => Promise.all(allPromises));
 }
 module.exports = {
-  handleLogin, checkUserExists, addUser, checkQuestionsExists, addQuestions, addAnswers, getResponse,
+  handleLogin,
+  checkUserExists,
+  addUser,
+  checkQuestionsExists,
+  addQuestions,
+  addAnswers,
+  getResponse,
 };
