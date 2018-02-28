@@ -7,12 +7,20 @@ const Models = require('../../models');
 // });
 
 
-describe('function handleTopScore', () => {
-  test('should return top 5 scorers from database', done =>
+describe('function handleCalculate', () => {
+  test('should return total number of questions from database', done =>
     handleLogin('TestUser')
       .then(() => calculate.getTotalQuestions('TestUser')
         .then(total => Models.questions.count().then((response) => {
           expect(total).toBe(response);
           done();
         }))));
+});
+
+describe('function getTotalCorrectResponses', () => {
+  test('should return total number of correct Responses from database',  =>
+    handleLogin('TestUser')
+      .then(() => calculate.getTotalCorrectResponses('TestUser')
+        .then(total => 
+          expect(total).toBe(0))))
 });
