@@ -33,5 +33,5 @@ function handleCalculate(username) {
     })));
 }
 module.exports = {
-  handleCalculate,
+  handleCalculate, getTotalQuestions, getTotalCorrectResponses,
 };
