@@ -35,7 +35,7 @@ afterAll(() => {
 });
 
 describe('function handleSaveResponse', () => {
-  test('should return null as user doesnot exist in db', () =>
+  test('should updates response in database', () =>
     handleLogin('TestUser')
       .then(() => handleSaveResponse('TestUser', 89, 'Majuro').then(data =>
         Models.responses.findOne({
