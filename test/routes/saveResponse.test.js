@@ -1,7 +1,5 @@
 const supertest = require('supertest');
 const server = require('../../src/server/server');
-const { handleLogin } = require('../../src/handlers/handleLogin');
-const Models = require('../../models');
 
 
 describe('route /quizzy/saveResponse', () => {
