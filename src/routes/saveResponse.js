@@ -5,7 +5,7 @@ module.exports = [
     method: 'POST',
     path: '/quizzy/saveResponse',
     handler: (request, response) => {
-      const payload = JSON.parse(request.payload);
+      const payload = request.payload;
       handleSaveResponse(payload.username, payload.questionId, payload.selectedOption)
         .then((updated) => {
           response({

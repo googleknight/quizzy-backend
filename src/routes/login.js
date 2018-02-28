@@ -5,6 +5,7 @@ module.exports = [
     method: 'POST',
     path: '/quizzy/login',
     handler: (request, response) => {
+      console.log(request.payload);
       handleLogin(request.payload.username).then((allQuestionsData) => {
         response({
           data: allQuestionsData,

@@ -6,6 +6,7 @@ module.exports = [
     path: '/quizzy/score',
     handler: (request, response) => {
       // const payload = JSON.parse(request.payload);
+      console.log(request.payload.username);
       handleCalculate(request.payload.username)
         .then((score) => {
           response({
