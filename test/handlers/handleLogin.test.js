@@ -1,27 +1,23 @@
 const login = require('../../src/handlers/handleLogin');
 const Models = require('../../models');
 
-beforeEach(() => {
-  Promise.resolve(Models.users.create({ username: 'TestUser' }));
+beforeEach((done) => {
+  Models.users.create({ username: 'TestUser' }).then(() => { done(); });
 });
-afterEach(() => {
-  Promise.resolve(Models.questions.destroy({
+afterEach((done) => {
+  Models.questions.destroy({
     where: { },
     truncate: false,
     restartIdentity: true,
-  }));
-  Promise.resolve(Models.users.destroy({
-    where: { username: ['TestUser', 'TestUser3'] },
-    truncate: false,
-    restartIdentity: true,
-  }));
+  }).then(() => {
+    Models.users.destroy({
+      where: { username: ['TestUser'] },
+      truncate: false,
+      restartIdentity: true,
+    }).then(() => { done(); });
+  });
 });
 
-
-afterAll(() => Models.questions.destroy({
-  truncate: false,
-  restartIdentity: true,
-}));
 
 describe('function checkUserExists', () => {
   test('should return null as user doesnot exist in db', () =>
@@ -62,10 +58,10 @@ describe('function addQuestions', () => {
 
 describe('function addAnswers', () => {
   test('gets answers from external API for that questionId and inserts into database', () =>
-    login.addAnswers().then((data) => {
+    login.addQuestions().then(() => login.addAnswers().then((data) => {
       Models.answers.findAll().then(Data =>
         expect(Data.length).toBeGreaterThan(0));
-    }));
+    })));
 });
 
 describe('function getResponse', () => {
