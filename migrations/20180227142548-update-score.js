@@ -13,6 +13,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    queryInterface.removeConstraint('score', 'custom_fkey_score_username_relation');
+    queryInterface.removeConstraint('scores', 'custom_fkey_score_username_relation');
   },
 };

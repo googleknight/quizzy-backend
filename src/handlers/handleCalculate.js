@@ -16,7 +16,7 @@ function getTotalCorrectResponses(username) {
       },
     }).then(count => count)))
     .then(all => Promise.all(all))
-    .then(matchArray => matchArray.reduce((sum, current) => sum + current));
+    .then(matchArray => matchArray.reduce((sum, current) => sum + current, 0));
 }
 
 function handleCalculate(username) {

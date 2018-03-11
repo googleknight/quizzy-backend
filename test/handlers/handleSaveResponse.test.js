@@ -2,46 +2,49 @@ const { handleSaveResponse } = require('../../src/handlers/handleSaveResponse');
 const { handleLogin } = require('../../src/handlers/handleLogin');
 const Models = require('../../models');
 
-// beforeAll(() => {
-//   Promise.resolve();
+// // beforeAll(() => {
+// //   Promise.resolve();
+// // });
+
+// afterAll((done) => {
+//   Models.users.destroy({
+//     where: { username: ['TestUser5'] },
+//     truncate: false,
+//     restartIdentity: true,
+//   }).then(() =>
+//     Models.questions.destroy({
+//       where: { },
+//       truncate: false,
+//       restartIdentity: true,
+//     })).then(() =>
+//     Models.responses.destroy({
+//       where: { username: ['TestUser5'] },
+//       truncate: false,
+//       restartIdentity: true,
+//     })).then(() =>
+//     Models.answers.destroy({
+//       where: { },
+//       truncate: false,
+//       restartIdentity: true,
+//     }))
+//     .then(() =>
+//       Models.options.destroy({
+//         where: { },
+//         truncate: false,
+//         restartIdentity: true,
+//       }))
+//     .then(() => { done(); });
 // });
 
-afterAll(() => {
-//   Models.users.destroy({
-//     where: { username: ['TestUser'] },
-//     truncate: false,
-//     restartIdentity: true,
-//   });
-//   Models.questions.destroy({
-//     where: { username: ['TestUser'] },
-//     truncate: false,
-//     restartIdentity: true,
-//   });
-//   Models.responses.destroy({
-//     where: { username: ['TestUser'] },
-//     truncate: false,
-//     restartIdentity: true,
-//   });
-//   Models.answers.destroy({
-//     where: { username: ['TestUser'] },
-//     truncate: false,
-//     restartIdentity: true,
-//   });
-//   Models.options.destroy({
-//     where: { username: ['TestUser'] },
-//     truncate: false,
-//     restartIdentity: true,
-//   });
-});
-
 describe('function handleSaveResponse', () => {
-  test('should updates response in database', () =>
-    handleLogin('TestUser')
-      .then(() => handleSaveResponse('TestUser', 89, 'Majuro').then(data =>
+  test('should updates response in database', (done) => {
+    handleLogin('TestUser5')
+      .then(() => handleSaveResponse('TestUser5', 67, 'Majuro').then(data =>
         Models.responses.findOne({
-          where: { username: 'TestUser', questionId: 89, selectedOption: 'Majuro' },
+          where: { username: 'TestUser5', questionId: 67, selectedOption: 'Majuro' },
         }).then((response) => {
-          console.log(response);
           expect(response.selectedOption).toBe('Majuro');
-        }))));
+        })));
+    done();
+  });
 });

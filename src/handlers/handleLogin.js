@@ -61,6 +61,7 @@ function getResponse(userName) {
     .then(questions =>
       questions.map(question =>
         Models.responses.findOne({
+          attributes: ['selectedOption'],
           where: { questionId: question.questionId, username: userName },
         })
           .then(response =>
@@ -74,30 +75,32 @@ function getResponse(userName) {
                   questionId: question.questionId,
                   statement: question.statement,
                   options: allOptions,
-                  response,
+                  response: response !== null ? response.selectedOption : '',
                 };
               }))));
 }
 
 function handleLogin(userName) {
-  return checkUserExists(userName)
-    .then((user) => {
-      if (user === null) {
-        return Promise.resolve(addUser(userName));
-      }
-      return user;
-    })
-    .then(() => checkQuestionsExists())
-    .then((questions) => {
-      if (questions.length === 0) {
-        return Promise.resolve(addQuestions())
-          .then(data => addAnswers())
-          .then(allPromises => Promise.resolve(allPromises));
-      }
-      return questions;
-    })
-    .then(allResponses => getResponse(userName))
-    .then(allPromises => Promise.all(allPromises));
+  if (userName.length !== 0) {
+    return checkUserExists(userName)
+      .then((user) => {
+        if (user === null) {
+          return Promise.resolve(addUser(userName));
+        }
+        return user;
+      })
+      .then(() => checkQuestionsExists())
+      .then((questions) => {
+        if (questions.length === 0) {
+          return Promise.resolve(addQuestions())
+            .then(data => addAnswers())
+            .then(allPromises => Promise.resolve(allPromises));
+        }
+        return questions;
+      })
+      .then(allResponses => getResponse(userName))
+      .then(allPromises => Promise.all(allPromises));
+  }
 }
 module.exports = {
   handleLogin,
